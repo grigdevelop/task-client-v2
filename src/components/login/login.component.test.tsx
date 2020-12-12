@@ -27,26 +27,25 @@ afterEach(async () => {
 
 describe('LoginComponent', () => {
 
+  const fieldValidation = async (fieldName: string, value: string | null, expected: string) => {
+    const submit: Element = container.querySelector('[data-testid=login-form]')!;
+    const errorField = container.querySelector(`[data-testid=${fieldName}-error]`);
+    const field = container.querySelector(`[data-testid=${fieldName}]`)!;
+
+    await act(async () => {
+      if (value !== null) {
+        fireEvent.input(field, { target: { value } });
+      }
+      fireEvent.submit(submit);
+    });
+
+    expect(errorField?.textContent).toBe(expected);
+  };
 
   it("form -> 'username' validation", async () => {
     await act(async () => {
       render(<TestLoginComponent />, container);
     });
-
-    const fieldValidation = async (fieldName: string, value: string | null, expected: string) => {
-      const submit: Element = container.querySelector('[data-testid=login-form]')!;
-      const errorField = container.querySelector(`[data-testid=${fieldName}-error]`);
-      const field = container.querySelector(`[data-testid=${fieldName}]`)!;
-
-      await act(async () => {
-        if (value !== null) {
-          fireEvent.input(field, { target: { value } });
-        }
-        fireEvent.submit(submit);
-      });
-
-      expect(errorField?.textContent).toBe(expected);
-    };
 
     await fieldValidation('username', null, 'username is required');
     await fieldValidation('username', 'grigdevelop', '');
@@ -58,21 +57,6 @@ describe('LoginComponent', () => {
     await act(async () => {
       render(<TestLoginComponent />, container);
     });
-
-    const fieldValidation = async (fieldName: string, value: string | null, expected: string) => {
-      const submit: Element = container.querySelector('[data-testid=login-form]')!;
-      const errorField = container.querySelector(`[data-testid=${fieldName}-error]`);
-      const field = container.querySelector(`[data-testid=${fieldName}]`)!;
-
-      await act(async () => {
-        if (value !== null) {
-          fireEvent.input(field, { target: { value } });
-        }
-        fireEvent.submit(submit);
-      });
-
-      expect(errorField?.textContent).toBe(expected);
-    };
 
     await fieldValidation('password', null, 'password is required');
     await fieldValidation('password', 'password', '');
