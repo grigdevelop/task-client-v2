@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { useForm, ErrorOption } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+
 
 interface Props {
   onSubmit: (loginData: LoginData) => void;
@@ -15,11 +19,16 @@ interface LoginErrorsType {
   usernameError: string;
   passwordError: string;
 }
-// @types/
+const formValidatorScheme: yup.SchemaOf<LoginData> = yup.object().shape({
+  username: yup.string().required('username is required').min(3).max(15),
+  password: yup.string().required('password is required'),
+});
 
 const LoginComponent = (props: Props) => {
   const { onSubmit, loginErrors } = props;
-  const { register, handleSubmit, errors, setError } = useForm<LoginData>();
+  const { register, handleSubmit, errors, setError } = useForm<LoginData>({
+    resolver: yupResolver(formValidatorScheme)
+  });
 
   // setup errors
   if (loginErrors) {
@@ -40,30 +49,32 @@ const LoginComponent = (props: Props) => {
   return (
     <>
       <h2>Log in</h2>
-      <form className="input-gropu" onSubmit={handleSubmit(handleOnSumbmit)}>
+      <form data-testid='login-form' className="input-gropu" onSubmit={handleSubmit(handleOnSumbmit)}>
         <div>
           <label htmlFor="username">Username</label>
           <input
             id="username"
             name="username"
-            ref={register({ required: true })}
+            data-testid="username"
+            ref={register}
             type="text"
             placeholder="Enter username"
           />
-          <p id="usernameError">{errors.username && "Username is required"}</p>
+          <p data-testid="username-error">{errors.username && errors.username.message}</p>
         </div>
         <div>
           <label htmlFor="password">Password</label>
           <input
             id="password"
             name="password"
-            ref={register({ required: true })}
+            data-testid="password"
+            ref={register}
             type="password"
             placeholder="Enter password"
           />
-          <p>{errors.password && "Password is required"}</p>
+          <p data-testid="password-error">{errors.password && errors.password.message}</p>
         </div>
-        <button id="submitBtn" type="submit">
+        <button data-testid="submit" type="submit">
           Login
         </button>
       </form>
