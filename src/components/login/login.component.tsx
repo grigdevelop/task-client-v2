@@ -3,11 +3,9 @@ import { useForm } from "react-hook-form";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-
-
 interface Props {
   onSubmit: (loginData: LoginData) => void;
-  loginErrors: LoginErrorsType | null;
+  errorMessage: string;
 }
 
 interface LoginData {
@@ -15,46 +13,33 @@ interface LoginData {
   password: string;
 }
 
-interface LoginErrorsType {
-  usernameError: string;
-  passwordError: string;
-}
 const formValidatorScheme: yup.SchemaOf<LoginData> = yup.object().shape({
   username: yup.string().required('username is required').min(3).max(15),
   password: yup.string().required('password is required'),
 });
 
 const LoginComponent = (props: Props) => {
-  const { onSubmit, loginErrors } = props;
+  const { onSubmit, errorMessage } = props;
   const { register, handleSubmit, errors, setError } = useForm<LoginData>({
     resolver: yupResolver(formValidatorScheme)
   });
 
-  // setup errors
-  if (loginErrors) {
-    setError("username", {
-      message: loginErrors.usernameError,
-      type: "validate",
-    });
-    setError("password", {
-      message: loginErrors.passwordError,
-      type: "validate",
-    });
-  }
-
+  // and this is how i'm writing the text
   const handleOnSumbmit = (data: LoginData) => {
     //TODO: check errors
     onSubmit(data);
   };
+
   return (
     <>
       <h2>Log in</h2>
-      <form data-testid='login-form' className="input-gropu" onSubmit={handleSubmit(handleOnSumbmit)}>
-        <div>
-          <label htmlFor="username">Username</label>
+      <form data-testid='login-form' onSubmit={handleSubmit(handleOnSumbmit)}>
+        <div className="mb-3">
+          <label htmlFor="username" className="form-label">Username</label>
           <input
             id="username"
             name="username"
+            className="form-control"
             data-testid="username"
             ref={register}
             type="text"
@@ -62,11 +47,12 @@ const LoginComponent = (props: Props) => {
           />
           <p data-testid="username-error">{errors.username && errors.username.message}</p>
         </div>
-        <div>
+        <div className="mb-3">
           <label htmlFor="password">Password</label>
           <input
             id="password"
             name="password"
+            className="form-control"
             data-testid="password"
             ref={register}
             type="password"
@@ -74,7 +60,10 @@ const LoginComponent = (props: Props) => {
           />
           <p data-testid="password-error">{errors.password && errors.password.message}</p>
         </div>
-        <button data-testid="submit" type="submit">
+        <div>
+          <p>{errorMessage}</p>
+        </div>
+        <button data-testid="submit" type="submit" className="btn btn-primary">
           Login
         </button>
       </form>
@@ -83,13 +72,21 @@ const LoginComponent = (props: Props) => {
 };
 
 const TestLoginComponent = () => {
-  const [loginErrors, setLoginErrors] = useState<null | LoginErrorsType>(null);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleSubmit = (loginData: LoginData) => {
     console.log(loginData);
   };
 
-  return <LoginComponent loginErrors={loginErrors} onSubmit={handleSubmit} />;
+  return (
+    <>
+      <div className="row">
+        <div className="col">
+          <LoginComponent errorMessage={errorMessage} onSubmit={handleSubmit} />
+        </div>
+      </div>
+    </>
+  );
 };
 
 export { LoginComponent, TestLoginComponent };
