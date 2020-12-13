@@ -6,22 +6,29 @@ import { HeaderComponent } from './components/header/header.component';
 import 'bootstrap/scss/bootstrap.scss';
 import './App.css';
 
+import { TaskuAppContext } from './store';
+import { createServices } from './store/createServices';
+
 function App() {
+  const services = createServices();
+
   return (
     <>
-      <BrowserRouter>
-        <HeaderComponent />
+      <TaskuAppContext.Provider value={{ services }}>
+        <BrowserRouter>
+          <HeaderComponent />
 
-        <div className="container">
+          <div className="container">
 
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/about" component={AboutPage} />
-            <Route exact path="/login" component={TestLoginComponent} />
-          </Switch>
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/about" component={AboutPage} />
+              <Route exact path="/login" component={TestLoginComponent} />
+            </Switch>
 
-        </div>
-      </BrowserRouter>
+          </div>
+        </BrowserRouter>
+      </TaskuAppContext.Provider>
     </>
 
   );

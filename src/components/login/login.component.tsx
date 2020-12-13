@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useServices } from "../../hooks/useServices";
 
 interface Props {
   onSubmit: (loginData: LoginData) => void;
@@ -19,10 +20,13 @@ const formValidatorScheme: yup.SchemaOf<LoginData> = yup.object().shape({
 });
 
 const LoginComponent = (props: Props) => {
-  const { onSubmit, errorMessage } = props;
   const { register, handleSubmit, errors, setError } = useForm<LoginData>({
     resolver: yupResolver(formValidatorScheme)
   });
+  const { authService } = useServices();
+  console.log(authService);
+
+  const { onSubmit, errorMessage } = props;
 
   // and this is how i'm writing the text
   const handleOnSumbmit = (data: LoginData) => {
