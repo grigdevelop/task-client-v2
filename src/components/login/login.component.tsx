@@ -24,7 +24,7 @@ const LoginComponent = (props: Props) => {
     resolver: yupResolver(formValidatorScheme)
   });
   const { authService } = useServices();
-  console.log(authService);
+  //console.log(authService);
 
   const { onSubmit, errorMessage } = props;
 
