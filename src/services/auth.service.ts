@@ -1,9 +1,9 @@
-import { IAuthService } from "./interfaces";
-
-
+import { AppResponse, IAuthService, LoginInput, LoginOutput } from "./interfaces";
 
 export class AuthService implements IAuthService {
-    login(): void {
+
+    async login(input: LoginInput): Promise<AppResponse<LoginOutput>> {
         throw new Error("Method not implemented.");
     }
+
 }

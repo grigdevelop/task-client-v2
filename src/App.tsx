@@ -8,9 +8,10 @@ import './App.css';
 
 import { TaskuAppContext } from './store';
 import { createServices } from './store/createServices';
+import { createTestServiceStore } from './utils/testUtils/testServiceStore';
 
 function App() {
-  const services = createServices();
+  const services = createTestServiceStore();
 
   return (
     <>

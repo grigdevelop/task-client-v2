@@ -34,7 +34,7 @@ export class Repository<TEntity extends Partial<{ id: number }>> {
 
     async delete(id: number): Promise<TEntity> {
         // find item
-        let entity = this.data.find(x => x.id == id);
+        let entity = this.data.find(x => x.id === id);
         if (!entity) throw new Error("REPO [DELETE]: item not found");
 
         const index = this.data.indexOf(entity);
@@ -44,7 +44,7 @@ export class Repository<TEntity extends Partial<{ id: number }>> {
     }
 
     async getById(id: number): Promise<TEntity | null> {
-        let entity = this.data.find(item => item.id == id);
+        let entity = this.data.find(item => item.id === id);
         if (!entity) return null;
         return entity;
     }
@@ -55,8 +55,21 @@ export class Repository<TEntity extends Partial<{ id: number }>> {
         });
     }
 
+    async findOnlyOne(pridicate: (entity: TEntity) => boolean): Promise<TEntity> {
+        const result = this.data.filter(pridicate);
+        if (result.length > 1) throw new Error('REPO [FIND_ONE]: More then one item found.');
+        if (result.length === 0) throw new Error('REPO [FIND_ONE]: Item not found.');
+        return { ...result[0] };
+    }
+
+    async findOne(pridicate: (entity: TEntity) => boolean): Promise<TEntity | null> {
+        const item = this.data.find(pridicate);
+        if (!item) return null;
+        return { ...item };
+    }
+
     private getNewId() {
-        if (this.data.length == 0) return 1;
+        if (this.data.length === 0) return 1;
         return Math.max(...this.data.map(x => x.id!)) + 1;
     }
 }

@@ -1,0 +1,12 @@
+- Login component
+TODO: unit tests for login component
+    - invalid / valid username
+    - invalid / valid password
+    - user exists / not exists
+    - wrong / right password
+TODO: navigate to profile page on success login
+TODO: show normal validation errors
+
+- Profile component
+
+- Characteristics

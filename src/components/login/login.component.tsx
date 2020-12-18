@@ -1,13 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useServices } from "../../hooks/useServices";
-
-interface Props {
-  onSubmit: (loginData: LoginData) => void;
-  errorMessage: string;
-}
 
 interface LoginData {
   username: string;
@@ -19,19 +14,26 @@ const formValidatorScheme: yup.SchemaOf<LoginData> = yup.object().shape({
   password: yup.string().required('password is required'),
 });
 
-const LoginComponent = (props: Props) => {
+const LoginComponent = () => {
+  const { authService } = useServices();
   const { register, handleSubmit, errors, setError } = useForm<LoginData>({
     resolver: yupResolver(formValidatorScheme)
   });
-  const { authService } = useServices();
-  //console.log(authService);
-
-  const { onSubmit, errorMessage } = props;
 
   // and this is how i'm writing the text
-  const handleOnSumbmit = (data: LoginData) => {
-    //TODO: check errors
-    onSubmit(data);
+  const handleOnSumbmit = async (data: LoginData) => {
+    const result = await authService.login(data);
+    if (result.success) {
+      alert("login done!");
+    } else {
+      switch (result.error?.type) {
+        case "form":
+          for (const field in result.error.formErrors) {
+            setError(field as Extract<keyof LoginData, string>, { message: result.error.formErrors[field], type: 'validate', shouldFocus: true });
+          }
+          break;
+      }
+    }
   };
 
   return (
@@ -64,9 +66,6 @@ const LoginComponent = (props: Props) => {
           />
           <p data-testid="password-error">{errors.password && errors.password.message}</p>
         </div>
-        <div>
-          <p>{errorMessage}</p>
-        </div>
         <button data-testid="submit" type="submit" className="btn btn-primary">
           Login
         </button>
@@ -76,17 +75,11 @@ const LoginComponent = (props: Props) => {
 };
 
 const TestLoginComponent = () => {
-  const [errorMessage, setErrorMessage] = useState<string>('');
-
-  const handleSubmit = (loginData: LoginData) => {
-    console.log(loginData);
-  };
-
   return (
     <>
       <div className="row">
         <div className="col">
-          <LoginComponent errorMessage={errorMessage} onSubmit={handleSubmit} />
+          <LoginComponent />
         </div>
       </div>
     </>

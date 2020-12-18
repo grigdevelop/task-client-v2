@@ -122,4 +122,25 @@ describe('[Repository] class test', () => {
         expect(data[1].name).toEqual('user 2');
         expect(data[2].name).toEqual('user 3');
     });
+
+    it('should find only one', async () => {
+        // arrange
+        data.push({
+            id: 1,
+            name: "user 1"
+        });
+        data.push({
+            id: 2,
+            name: "user 2"
+        });
+        data.push({
+            id: 3,
+            name: "user 3"
+        });
+
+        // act
+        await expect(async () => {
+            await repo.findOnlyOne(one => one.name.includes('user'));
+        }).rejects.toThrowError();
+    });
 });
