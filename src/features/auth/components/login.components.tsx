@@ -1,11 +1,9 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AuthState } from "../store/auth.state";
 import * as authActions from './../store/action.creators';
 import { connect } from "react-redux";
-import { AppState } from "../../../store/app.state";
 
 // redux
 const mapStateToProps = (state: AppState): AuthState => {
@@ -19,7 +17,6 @@ const mapStateToProps = (state: AppState): AuthState => {
 // };
 
 const dispatchProps = (dispatch: Dispatch<any>) => ({
-    login: authActions.login,
     loginAsync: authActions.loginAsync(dispatch)
 });
 
@@ -36,7 +33,7 @@ const formValidatorScheme: yup.SchemaOf<LoginData> = yup.object().shape({
 });
 
 const Component = (props: Props) => {
-    const { login, loginAsync } = props;
+    const { loginAsync, isLoading } = props;
     const { register, handleSubmit, errors, setError } = useForm<LoginData>({
         resolver: yupResolver(formValidatorScheme)
     });
@@ -88,9 +85,9 @@ const Component = (props: Props) => {
                     />
                     <p data-testid="password-error">{errors.password && errors.password.message}</p>
                 </div>
-                <button data-testid="submit" type="submit" className="btn btn-primary">
+                <button disabled={isLoading} data-testid="submit" type="submit" className="btn btn-primary">
                     Login
-        </button>
+                </button>
             </form>
         </>
     );

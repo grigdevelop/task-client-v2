@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AppState } from '../../../store/app.state';
-import { AuthState } from '../store/auth.state';
 
 const mapStateToProps = (state: AppState): AuthState => {
     return state.auth;
@@ -37,9 +35,11 @@ export const Component = (props: Props) => {
                                 <li className="nav-item">
                                     <Link to="/login" className="nav-link">Login</Link>
                                 </li>
-                                <li className="nav-item">
-                                    <Link to="/login" className="nav-link">{user}</Link>
-                                </li>
+                                {user ? (
+                                    <li className="nav-item">
+                                        <Link to="/login" className="nav-link">{user.username}</Link>
+                                    </li>
+                                ) : <></>}
                             </ul>
                         </div>
                     </div>

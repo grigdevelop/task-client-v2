@@ -1,9 +1,6 @@
-import { stat } from "fs";
-import { AuthActions } from "./actions";
-import { AuthState } from "./auth.state";
-
 const initialState: AuthState = {
-    user: 'no user'
+    user: null,
+    isLoading: false
 };
 
 export function authReducer(state: AuthState = initialState, action: AuthActions): AuthState {
@@ -12,9 +9,13 @@ export function authReducer(state: AuthState = initialState, action: AuthActions
 
     switch (action.type) {
         case "AUTH_LOGIN":
-            return { ...state, user: action.payload.username };
+            return { ...state, user: { username: action.payload.username } };
         case "AUTH_LOGOUT":
-            return { ...state, user: 'no user' };
+            return { ...state, user: null };
+        case "AUTH_LOADING":
+            return { ...state, isLoading: true };
+        case "AUTH_LOADED":
+            return { ...state, isLoading: false };
         default:
             return state;
     }
