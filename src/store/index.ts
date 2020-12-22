@@ -1,17 +1,10 @@
-import { createContext } from 'react';
-import { createServices } from './createServices';
-import { ServiceStore } from "./servicesStore";
+import { combineReducers, createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
-export interface AppContext {
-    services: ServiceStore;
-}
+import { authReducer } from '../features/auth/store/reducer';
 
+const reducers = combineReducers({
+    auth: authReducer
+})
 
-export const createAppContext = (services: ServiceStore) => {
-    const context = createContext<AppContext>({
-        services
-    });
-    return context;
-}
-
-export const TaskuAppContext = createAppContext(createServices());
+export const store = createStore(reducers, applyMiddleware(thunk));

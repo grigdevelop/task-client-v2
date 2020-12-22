@@ -1,7 +1,22 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { AppState } from '../../../store/app.state';
+import { AuthState } from '../store/auth.state';
 
-export const HeaderComponent = () => {
+const mapStateToProps = (state: AppState): AuthState => {
+    return state.auth;
+};
+
+const dispatchProps = {
+
+};
+
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+
+
+export const Component = (props: Props) => {
+    const { user } = props;
     return (
         <>
             <header>
@@ -22,6 +37,9 @@ export const HeaderComponent = () => {
                                 <li className="nav-item">
                                     <Link to="/login" className="nav-link">Login</Link>
                                 </li>
+                                <li className="nav-item">
+                                    <Link to="/login" className="nav-link">{user}</Link>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -30,3 +48,7 @@ export const HeaderComponent = () => {
         </>
     );
 };
+
+const connected = connect(mapStateToProps, dispatchProps)(Component);
+
+export { connected as NavigationComponent };

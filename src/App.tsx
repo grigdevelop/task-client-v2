@@ -1,37 +1,39 @@
+// external libraries
 import React from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { TestLoginComponent } from './components/login/login.component';
-import { HomePage, AboutPage } from './pages';
-import { HeaderComponent } from './components/header/header.component';
+
+// styles
 import 'bootstrap/scss/bootstrap.scss';
 import './App.css';
 
-import { TaskuAppContext } from './store';
-import { createServices } from './store/createServices';
-import { createTestServiceStore } from './utils/testUtils/testServiceStore';
+// internal files
+import { HomePage, AboutPage } from './pages';
+import { NavigationComponent, LoginComponent } from './features/auth';
+
+// store
+import { store } from './store';
 
 function App() {
-  const services = createTestServiceStore();
 
   return (
     <>
-      <TaskuAppContext.Provider value={{ services }}>
+      <Provider store={store}>
         <BrowserRouter>
-          <HeaderComponent />
+          <NavigationComponent />
 
           <div className="container">
 
             <Switch>
               <Route exact path="/" component={HomePage} />
               <Route exact path="/about" component={AboutPage} />
-              <Route exact path="/login" component={TestLoginComponent} />
+              <Route exact path="/login" component={LoginComponent} />
             </Switch>
 
           </div>
         </BrowserRouter>
-      </TaskuAppContext.Provider>
+      </Provider>
     </>
-
   );
 }
 
