@@ -11,7 +11,10 @@ export class AuthApiLocal implements AuthApi {
     }
 
     async login(input: apiData.LoginInput): Promise<AppResponse<apiData.LoginOutput>> {
+        await this.sleep(2000);
+
         try {
+            console.log(input);
             const user = await this.usersRepo.findOne(x => x.username == input.username);
             if (!user) return {
                 success: false,
@@ -51,4 +54,11 @@ export class AuthApiLocal implements AuthApi {
     }
 
 
+    private sleep(ms: number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve();
+            }, ms);
+        });
+    }
 }

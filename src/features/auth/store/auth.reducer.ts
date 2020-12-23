@@ -1,4 +1,4 @@
-import { AuthState, actions as Auth } from '../types';
+import { AuthState, AuthAction } from '../types';
 
 
 const initialState: AuthState = {
@@ -7,9 +7,7 @@ const initialState: AuthState = {
     errors: null
 };
 
-export function authReducer(state: AuthState = initialState, action: Auth.AuthActions): AuthState {
-    // log
-    console.log("authReducer:", state);
+export function authReducer(state: AuthState = initialState, action: AuthAction): AuthState {
 
     switch (action.type) {
         case "AUTH_LOGIN":

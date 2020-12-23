@@ -9,10 +9,14 @@ import './App.css';
 
 // internal files
 import { HomePage, AboutPage } from '../pages';
-import { NavigationComponent, LoginComponent } from '../features/auth';
+
+// components
+import { NavigationComponent } from '../features/auth/components/navigation/navigation.component';
+import { LoginComponent } from '../features/auth/components/login/login.components';
 
 // store
-import { store } from '../store';
+import { configureStore } from '../store/configureStore';
+const store = configureStore();
 
 function App() {
 

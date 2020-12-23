@@ -1,22 +1,15 @@
+// external
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AppState } from '../../../app';
-import { AuthState } from '../types';
 
-const mapStateToProps = (state: AppState): AuthState => {
-    return state.auth;
-};
+// internal
+import { AppState } from '../../../../app';
+import { AuthState } from '../../types';
 
-const dispatchProps = {
+export const NavigationComponent = () => {
+    const user = useSelector<AppState, PropType<AuthState, "user">>(state => state.auth.user);
 
-};
-
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
-
-
-export const Component = (props: Props) => {
-    const { user } = props;
     return (
         <>
             <header>
@@ -50,7 +43,3 @@ export const Component = (props: Props) => {
         </>
     );
 };
-
-const connected = connect(mapStateToProps, dispatchProps)(Component);
-
-export { connected as NavigationComponent };

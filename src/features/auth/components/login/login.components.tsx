@@ -5,11 +5,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from "react-redux";
 
 // internal
-import * as authActions from './../store/action.creators';
-import { AuthState } from "../types";
+import * as authActions from '../../store/auth.actions';
+import { AuthState } from "../../types";
 
 // internal external
-import { AppState } from "../../../app";
+import { AppState } from "../../../../app";
+import { useHistory } from "react-router-dom";
 
 interface LoginData {
     username: string;
@@ -22,7 +23,11 @@ const formValidatorScheme: yup.SchemaOf<LoginData> = yup.object().shape({
 });
 
 export const LoginComponent = () => {
-    const { isLoading, errors: authErrors } = useSelector<AppState, AuthState>(state => state.auth);
+    // selectors
+    const isLoading = useSelector<AppState, PropType<AuthState, "isLoading">>(state => state.auth.isLoading);
+    const authErrors = useSelector<AppState, PropType<AuthState, "errors">>(state => state.auth.errors);
+
+    const history = useHistory();
     const dispatch = useDispatch();
 
     const { register, handleSubmit, errors } = useForm<LoginData>({
@@ -47,7 +52,8 @@ export const LoginComponent = () => {
 
     // and this is how i'm writing the text
     const handleOnSumbmit = async (data: LoginData) => {
-        authActions.loginAsync(dispatch)(data);
+        //authActions.loginAsync(dispatch, history)(data);
+        dispatch(authActions.loginAsync(data, history));
     };
 
     const inputChanged = () => {

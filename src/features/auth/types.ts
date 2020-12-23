@@ -17,28 +17,28 @@ export type AuthState = {
     } | null
 }
 
-export namespace actions {
+export namespace AuthActions {
 
-    export type LoginActionType = {
+    export type Auth_LoginAction = {
         type: 'AUTH_LOGIN',
         payload: {
             username: string;
         }
     };
 
-    export type LogoutActionType = {
+    export type Auth_LogoutAction = {
         type: 'AUTH_LOGOUT'
     };
 
-    export type AuthLoadingActionType = {
+    export type Auth_LoadingAction = {
         type: 'AUTH_LOADING'
     };
 
-    export type AuthLoadedActionType = {
+    export type Auth_LoadedAction = {
         type: 'AUTH_LOADED'
     };
 
-    export type LoginErrorType = {
+    export type Auth_LoginErrorsAction = {
         type: 'AUTH_LOGIN_ERROR',
         payload: {
             username: string | null;
@@ -46,14 +46,21 @@ export namespace actions {
         }
     }
 
-    export type Auth_CleanErrorType = {
+    export type Auth_CleanErrorsAction = {
         type: 'AUTH_CLEAN_ERRORS'
     };
 
-    export type AuthActions = LoginActionType | LogoutActionType |
-        AuthLoadingActionType | AuthLoadedActionType |
-        LoginErrorType | Auth_CleanErrorType;
-    export type AuthActionTypes = PropType<AuthActions, "type">;
+
 }
 
-export type ThunkResult<R> = ThunkAction<R, AppState, { api: any }, actions.AuthActions>;
+export type AuthAction = AuthActions.Auth_LoginAction
+    | AuthActions.Auth_LogoutAction
+    | AuthActions.Auth_LoadingAction
+    | AuthActions.Auth_LoadedAction
+    | AuthActions.Auth_LoginErrorsAction
+    | AuthActions.Auth_CleanErrorsAction;
+
+export type AuthActionTypes = PropType<AuthAction, "type">;
+
+
+export type ThunkResult<R> = ThunkAction<R, AppState, { api: any }, AuthAction>;
