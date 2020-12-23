@@ -1,26 +1,15 @@
-import { Dispatch } from "react";
+// external
 import { useForm } from "react-hook-form";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from "react-redux";
+
+// internal
 import * as authActions from './../store/action.creators';
-import { connect } from "react-redux";
+import { AuthState } from "../types";
 
-// redux
-const mapStateToProps = (state: AppState): AuthState => {
-    console.log("logins state: ", state);
-    return state.auth;
-};
-
-// const dispatchProps = {
-//     login: authActions.login,
-//     loginAsync: authActions.loginAsync
-// };
-
-const dispatchProps = (dispatch: Dispatch<any>) => ({
-    loginAsync: authActions.loginAsync(dispatch)
-});
-
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof dispatchProps>;
+// internal external
+import { AppState } from "../../../app";
 
 interface LoginData {
     username: string;
@@ -32,27 +21,39 @@ const formValidatorScheme: yup.SchemaOf<LoginData> = yup.object().shape({
     password: yup.string().required('password is required'),
 });
 
-const Component = (props: Props) => {
-    const { loginAsync, isLoading } = props;
-    const { register, handleSubmit, errors, setError } = useForm<LoginData>({
-        resolver: yupResolver(formValidatorScheme)
+export const LoginComponent = () => {
+    const { isLoading, errors: authErrors } = useSelector<AppState, AuthState>(state => state.auth);
+    const dispatch = useDispatch();
+
+    const { register, handleSubmit, errors } = useForm<LoginData>({
+        resolver: yupResolver(formValidatorScheme),
     });
+
+    if (authErrors) {
+        if (authErrors.username) {
+            errors.username = {
+                type: "validate",
+                message: authErrors.username,
+            };
+        }
+
+        if (authErrors.password) {
+            errors.password = {
+                type: "validate",
+                message: authErrors.password
+            };
+        }
+    }
 
     // and this is how i'm writing the text
     const handleOnSumbmit = async (data: LoginData) => {
-        loginAsync(data);
-        // const result = await authService.login(data);
-        // if (result.success) {
-        //   alert("login done!");
-        // } else {
-        //   switch (result.error?.type) {
-        //     case "form":
-        //       for (const field in result.error.formErrors) {
-        //         setError(field as Extract<keyof LoginData, string>, { message: result.error.formErrors[field], type: 'validate', shouldFocus: true });
-        //       }
-        //       break;
-        //   }
-        // }
+        authActions.loginAsync(dispatch)(data);
+    };
+
+    const inputChanged = () => {
+        if (authErrors) {
+            dispatch(authActions.cleanErrors());
+        }
     };
 
     return (
@@ -68,6 +69,8 @@ const Component = (props: Props) => {
                         data-testid="username"
                         ref={register}
                         type="text"
+                        disabled={isLoading}
+                        onChange={inputChanged}
                         placeholder="Enter username"
                     />
                     <p data-testid="username-error">{errors.username && errors.username.message}</p>
@@ -81,6 +84,8 @@ const Component = (props: Props) => {
                         data-testid="password"
                         ref={register}
                         type="password"
+                        disabled={isLoading}
+                        onChange={inputChanged}
                         placeholder="Enter password"
                     />
                     <p data-testid="password-error">{errors.password && errors.password.message}</p>
@@ -92,7 +97,3 @@ const Component = (props: Props) => {
         </>
     );
 };
-
-const connected = connect(mapStateToProps, dispatchProps)(Component);
-
-export { connected as LoginComponent };

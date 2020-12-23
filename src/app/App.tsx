@@ -8,11 +8,11 @@ import 'bootstrap/scss/bootstrap.scss';
 import './App.css';
 
 // internal files
-import { HomePage, AboutPage } from './pages';
-import { NavigationComponent, LoginComponent } from './features/auth';
+import { HomePage, AboutPage } from '../pages';
+import { NavigationComponent, LoginComponent } from '../features/auth';
 
 // store
-import { store } from './store';
+import { store } from '../store';
 
 function App() {
 

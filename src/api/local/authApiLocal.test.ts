@@ -1,16 +1,16 @@
 import 'jest';
-import { AuthService } from '../../services';
-import { DT_User, Repository } from './repository';
-import { TestAuthService } from './testServiceStore';
+import { AuthApi } from '../interfaces/auth.api';
+import { DT_User, Repository } from '../../api/local/repository';
+import { AuthApiLocal } from './authApiLocal';
 
 describe('testing local mock services', () => {
 
-    let authService: AuthService;
+    let authService: AuthApi;
     const dbUsers: DT_User[] = [];
 
     beforeEach(() => {
         dbUsers.splice(0);
-        authService = new TestAuthService(new Repository(dbUsers));
+        authService = new AuthApiLocal(new Repository(dbUsers));
     });
 
     it('should login the user', async () => {

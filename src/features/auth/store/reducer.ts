@@ -1,9 +1,13 @@
+import { AuthState, actions as Auth } from '../types';
+
+
 const initialState: AuthState = {
     user: null,
-    isLoading: false
+    isLoading: false,
+    errors: null
 };
 
-export function authReducer(state: AuthState = initialState, action: AuthActions): AuthState {
+export function authReducer(state: AuthState = initialState, action: Auth.AuthActions): AuthState {
     // log
     console.log("authReducer:", state);
 
@@ -16,6 +20,10 @@ export function authReducer(state: AuthState = initialState, action: AuthActions
             return { ...state, isLoading: true };
         case "AUTH_LOADED":
             return { ...state, isLoading: false };
+        case "AUTH_LOGIN_ERROR":
+            return { ...state, errors: action.payload };
+        case "AUTH_CLEAN_ERRORS":
+            return { ...state, errors: null };
         default:
             return state;
     }

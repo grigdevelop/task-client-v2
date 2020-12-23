@@ -1,5 +1,5 @@
 import 'jest';
-import { Repository } from './';
+import { Repository } from '.';
 
 interface TestUser {
     id?: number;

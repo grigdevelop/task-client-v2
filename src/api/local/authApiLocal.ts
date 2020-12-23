@@ -1,10 +1,8 @@
-import { AppResponse, IAuthService, LoginInput, LoginOutput } from "../../services/interfaces";
-import { ServiceStore } from "../../store/servicesStore";
+import { AuthApi } from "../interfaces/auth.api";
+import { apiData, AppResponse } from "../types";
 import { DT_User, Repository } from "./repository";
-import { resolveTestDatabase } from "./testDatabase";
 
-// use test data for test services
-export class TestAuthService implements IAuthService {
+export class AuthApiLocal implements AuthApi {
 
     constructor(
         private readonly usersRepo: Repository<DT_User>
@@ -12,7 +10,7 @@ export class TestAuthService implements IAuthService {
 
     }
 
-    async login(input: LoginInput): Promise<AppResponse<LoginOutput>> {
+    async login(input: apiData.LoginInput): Promise<AppResponse<apiData.LoginOutput>> {
         try {
             const user = await this.usersRepo.findOne(x => x.username == input.username);
             if (!user) return {
@@ -52,11 +50,5 @@ export class TestAuthService implements IAuthService {
         }
     }
 
-}
 
-export const createTestServiceStore = (): ServiceStore => {
-    const database = resolveTestDatabase();
-    return {
-        authService: new TestAuthService(new Repository(database.users))
-    };
-};
+}
