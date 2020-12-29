@@ -62,5 +62,4 @@ export type AuthAction = AuthActions.Auth_LoginAction
 
 export type AuthActionTypes = PropType<AuthAction, "type">;
 
-
 export type ThunkResult<R> = ThunkAction<R, AppState, { api: any }, AuthAction>;

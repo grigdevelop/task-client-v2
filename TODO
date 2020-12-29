@@ -1,5 +1,9 @@
 0.0.1
-TODO: - rename and restructure files
-TODO: - get read of index.ts files
-TODO: - configure store
-TODO: - get read of servies folder
+ - get read of index.ts files
+ - rename and restructure files
+ - configure store
+ - get read of servies folder
+
+0.0.2
+TODO: - test login component
+TODO: - on login -> navigate to profile
