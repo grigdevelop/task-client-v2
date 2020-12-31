@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 // styles
+import '@popperjs/core';
 import 'bootstrap/scss/bootstrap.scss';
 import './App.css';
 
@@ -18,6 +19,9 @@ import { LoginComponent } from '../features/auth/components/login/login.componen
 import { configureStore } from '../store/configureStore';
 import { createLocalApi } from '../api/local';
 
+// modal
+import { UniverstalModalProvider } from '../utils/universalModal';
+
 const api = createLocalApi();
 const store = configureStore(api);
 
@@ -26,20 +30,22 @@ function App() {
   return (
     <>
       <Provider store={store}>
-        <BrowserRouter>
-          <NavigationComponent />
+        <UniverstalModalProvider>
+          <BrowserRouter>
+            <NavigationComponent />
 
-          <div className="container">
+            <div className="container">
 
-            <Switch>
-              <Route exact path="/" component={HomePage} />
-              <Route exact path="/about" component={AboutPage} />
-              <Route exact path="/login" component={LoginComponent} />
-              <Route exact path="/profile" component={ProfilePage} />
-            </Switch>
+              <Switch>
+                <Route exact path="/" component={HomePage} />
+                <Route exact path="/about" component={AboutPage} />
+                <Route exact path="/login" component={LoginComponent} />
+                <Route exact path="/profile" component={ProfilePage} />
+              </Switch>
 
-          </div>
-        </BrowserRouter>
+            </div>
+          </BrowserRouter>
+        </UniverstalModalProvider>
       </Provider>
     </>
   );
