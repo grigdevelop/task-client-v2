@@ -6,7 +6,12 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 // styles
 import '@popperjs/core';
 import 'bootstrap/scss/bootstrap.scss';
+//import 'mdb-ui-kit/css/mdb.min.css';
 import './App.css';
+
+// js
+//import 'mdb-ui-kit';
+import 'bootstrap';
 
 // internal files
 import { HomePage, AboutPage, ProfilePage } from '../pages';
